@@ -24,8 +24,7 @@ void low(char str[40])
 }
 int isExistTag(Tags tags, char *tagName)
 {
-
-    /* get the first token */
+   /* get the first token */
     Token *token = tags.sommet;
 
     /* walk through other tokens */
@@ -313,7 +312,7 @@ void removeTag(char *Path, char *tagName)
     }
 }
 
-void supprimerCategorie(char *Path, char *category)
+ void supprimerCategorie(char *Path, char *category)
 {
     const char *fichier = Path;
     char buf[30];
