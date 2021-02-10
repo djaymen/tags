@@ -20,7 +20,7 @@ void low(char str[40])
             str[i] = str[i] + 32;
         }
     }
-    //printf("\n%s", str);
+    
 }
 int isExistTag(Tags tags, char *tagName)
 {
@@ -55,14 +55,11 @@ void set_tags(char *Path, char data[MAXLEN], char *tagName, int replace)
     }
     else
     { /// replace data
-
-        //removexattr(Path,tagName);
         char tab[MAXLEN];
 
         int i;
         for (i = 0; i < strlen(data); i++)
         {
-            //printf("c=%c\n", data[i]);
             tab[i] = data[i];
         }
         tab[i] = '\0';
@@ -153,7 +150,6 @@ void ListOfTags(Tags *tableau, char buff[MAXLEN], int size)
     {
         char *mot = &buff[index];
         char *m = &mot[5];
-        // printf("mot =%s and %d\n",m,strlen(m));
         add(tableau, m);
         index += strlen(m) + 6;
     }
@@ -163,10 +159,6 @@ int findInList(Tags *tags, char *tagName)
     Token *token = tags->sommet;
     while (token != NULL)
     {
-        //  printf(" \n token : [%s]  ",token->tag);
-        // printf(" \n tagName : [%s]  ",tagName);
-        // printf(" \n memCmp : %d ",memcmp(token->tag, tagName,strlen(token->tag)));
-
         if (memcmp(token->tag, tagName, strlen(token->tag)) == 0)
             return 1;
         token = (Token *)token->suivant;
@@ -203,10 +195,8 @@ char *TagsToBuf(Tags *tags)
     {
         strcat(token->tag, "#");
         strcat(data, token->tag);
-        //printf("tag :%s\n", token->tag);
         token = (Token *)token->suivant;
     }
-    //printf("\ndata :%s\n", data);
     return data;
 }
 
@@ -234,7 +224,6 @@ void addTagInCategorie(char *Path, char *category, char *tagName)
             add(listOfTags, tagName); /// add the tag to the list of tags
             char *buffer;
             buffer = TagsToBuf(listOfTags);
-            //printf("%s\n", buffer);
             set_tags(Path, buffer, category, 1);
         }
         else
@@ -268,7 +257,6 @@ void removeTagCategory(char *Path, char *category, char *tagName)
         deletTag(listOfTags, tagName);
         char *buffer;
         buffer = TagsToBuf(listOfTags);
-        //printf("%s\n", buffer);
         set_tags(Path, buffer, category, 1);
     }
     else
@@ -299,11 +287,9 @@ void removeTag(char *Path, char *tagName)
         get_tags(listOfTags, Path, tmp->tag);
         if (findInList(listOfTags, tagName))
         {
-            // printf("\nremove\n");
             deletTag(listOfTags, tagName);
             char *buffer;
             buffer = TagsToBuf(listOfTags);
-            //printf("%s\n", buffer);
             set_tags(Path, buffer, tmp->tag, 1);
             cnt = 1;
         }
@@ -440,19 +426,16 @@ int testCriteria(char *Path, search_criteria_t criteria)
     Tags *listcat = malloc(sizeof(Tags));
     listcat->NbTags = 0;
     listcat->sommet = NULL;
-    // printf("\n %d",size);
     if (size > 0)
     {
 
         ListOfTags(listcat, buff, size);
     }
-    // printf(" \n int : %d  and name %s\n",listcat->sommet==NULL,Path);
 
     if (listcat->sommet == NULL)
         return 0;
     Tags *listall = Allsoustags(Path, listcat);
 
-    // printf(" \n  name %s\n",Path);
     for (size_t i = 0; i < criteria.in_size; i++)
     {
         if (findInList(listall, criteria.in[i]) == 0)
@@ -587,7 +570,6 @@ void listFilesRecursively(char *basePath, search_criteria_t criteria)
 
         if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0)
         {
-            //printf("\n in the head %s/%s",basePath,dp->d_name);
             char buff[1024];
             sprintf(buff, "%s/%s", basePath, dp->d_name);
             if (testCriteria(buff, criteria) == 1)
@@ -598,11 +580,9 @@ void listFilesRecursively(char *basePath, search_criteria_t criteria)
                 {
                     printf("{ %s } satisfy the criteria ! \n", buff);
                     insertArray(&inodes, res1.st_ino);
-                    // inodes[cpt] = res1.st_ino;s
                     cpt++;
                 }
             }
-            // listTag("./fichiertest/test2/test.txt");
 
             // Construct new path from our base path
             strcpy(path, basePath);
